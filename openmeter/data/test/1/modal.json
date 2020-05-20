@@ -1,0 +1,7 @@
+{
+    "type":"multiple-choice",
+    "title":"Multiple Choice Test...",
+    "forceall":true,
+    "description":"<p>Ich bin ein Modal...</p>",
+    "choices":["Choice 1", "Choice 2", "Choice 3"]
+}

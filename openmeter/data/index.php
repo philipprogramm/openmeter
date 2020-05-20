@@ -26,35 +26,6 @@
  *
  */
 
-// get functions
-require("functions.php");
-
-// start session
-session_start();
-
-// check headers, if no request is given return 403
-if (!isset($_GET["request"])){
-    // return http 403
-    http_response_code(403);
-}
-
-$request = $_GET["request"];
-
-// request switch
-if ($request == "modalPos"){
-    // only if id is given, else return 403
-    if (!isset($_GET["id"])){
-        http_response_code(403);
-        exit();
-    }
-
-    echo getActModal($_GET["id"]);
-} else if ($request == "saveMC"){
-    // only if id + choice are given, else return 403
-    if (!isset($_GET["id"]) or !isset($_GET["choice"]) or !isset($_GET["modalid"])){
-        http_response_code(403);
-        exit();
-    }
-
-    file_put_contents("data/" . $_GET["id"] . "/" . $_GET["modalid"] . "/" . session_id() . ".choice", $_GET["choice"]);
-}
+// return http 404
+http_response_code(404);
+?>

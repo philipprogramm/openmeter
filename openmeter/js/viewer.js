@@ -1,4 +1,3 @@
-<?php
 /**
  * @copyright Copyright (c) 2020 Philipp Stappert <mail@philipprogramm.de>
  *
@@ -26,35 +25,43 @@
  *
  */
 
-// get functions
-require("functions.php");
+// variables
+var modalPos = -1;
 
-// start session
-session_start();
+// functions
 
-// check headers, if no request is given return 403
-if (!isset($_GET["request"])){
-    // return http 403
-    http_response_code(403);
+// function to check if new modal is avaliable
+function checkNewModalAvaliable(){
+    $.get("backend.php?request=modalPos&id=" + presId, 
+        function(data){
+            if(parseInt(data) != modalPos){
+                modalPos = parseInt(data);
+                displayModal(modalPos);
+            }
+        }
+    );
+    
+    // retrigger self
+    setTimeout(checkNewModalAvaliable, 3000);
 }
 
-$request = $_GET["request"];
-
-// request switch
-if ($request == "modalPos"){
-    // only if id is given, else return 403
-    if (!isset($_GET["id"])){
-        http_response_code(403);
-        exit();
-    }
-
-    echo getActModal($_GET["id"]);
-} else if ($request == "saveMC"){
-    // only if id + choice are given, else return 403
-    if (!isset($_GET["id"]) or !isset($_GET["choice"]) or !isset($_GET["modalid"])){
-        http_response_code(403);
-        exit();
-    }
-
-    file_put_contents("data/" . $_GET["id"] . "/" . $_GET["modalid"] . "/" . session_id() . ".choice", $_GET["choice"]);
+// function to display new modal
+function displayModal(modalId){
+    $('#modal' + modalId).modal('show');
 }
+
+// multiple choice: show send button if option is clicked
+$('.validateclick').click(function(){
+    $('.sendbutton').removeAttr("disabled");
+})
+
+// multiple choice: save choice
+$('.sendbutton').click(function(){
+    var choice = $("input[name='multiplechoice" + modalPos + "']:checked").val();
+    $.get("backend.php?request=saveMC&id=" + presId + "&choice=" + choice + "&modalid=" + modalPos);
+})
+
+// load script
+$(document).ready(function(){
+    setTimeout(checkNewModalAvaliable, 1000);
+})

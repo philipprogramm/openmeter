@@ -1,0 +1,6 @@
+{
+    "type":"text",
+    "title":"Test",
+    "forceall":true,
+    "html":"<p>Ich bin ein Modal...</p>"
+}
