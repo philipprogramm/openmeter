@@ -40,17 +40,21 @@ function getModals(string $presId){
 
     // get types and content and add it to returner array
     $allModals = array();
-    
+
+    // solve sort problem on some oses
+    $i = 0;
     foreach ($allModalFolders as $modalFolder){
         // exclude dots
         if($modalFolder->isDot()) continue;
         
         // get modal json
-        $modalSettings = file_get_contents('data/' . $presId . '/' . $modalFolder . '/modal.json');
+        $modalSettings = file_get_contents('data/' . $presId . '/' . $i . '/modal.json');
         $modalSettings = json_decode($modalSettings, true);
 
         // add to all modals array
         array_push($allModals, $modalSettings);
+
+        $i++;
     }
 
     // return array
