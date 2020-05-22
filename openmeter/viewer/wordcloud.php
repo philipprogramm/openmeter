@@ -30,4 +30,9 @@
 <canvas height="600px" width="600px" id="wordcloud"></canvas>
 <script>
     WordCloud(document.getElementById('wordcloud'), {list: <?php echo json_encode(getWordCloudData($presId, $modalId)); ?>, backgroundColor: "transparent", color: "white"} );
+
+    // auto reload
+    setTimeout(function(){
+        document.location = "presentation.php?id=<?php echo $presId; ?>&page=<?php echo $modalId; ?>"
+    }, 10000);
 </script>

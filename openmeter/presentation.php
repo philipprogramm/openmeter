@@ -85,6 +85,7 @@
         <script>
             // Variables
             var presId = "<?php echo $_GET["id"]; ?>";
+            var pageId = <?php echo $_GET["page"]; ?>;
         </script>
         <script src="js/presentation.js"></script>
     </body>
