@@ -1,3 +1,4 @@
+<?php
 /**
  * @copyright Copyright (c) 2020 Philipp Stappert <mail@philipprogramm.de>
  *
@@ -24,44 +25,9 @@
  * SOFTWARE.
  *
  */
-
-// variables
-var modalPos = -1;
-
-// functions
-
-// function to check if new modal is avaliable
-function checkNewModalAvaliable(){
-    $.get("backend.php?request=modalPos&id=" + presId, 
-        function(data){
-            if(parseInt(data) != modalPos){
-                modalPos = parseInt(data);
-                displayModal(modalPos);
-            }
-        }
-    );
-    
-    // retrigger self
-    setTimeout(checkNewModalAvaliable, 3000);
-}
-
-// function to display new modal
-function displayModal(modalId){
-    $('#modal' + modalId).modal('show');
-}
-
-// multiple choice: show send button if option is clicked
-$('.validateclick').click(function(){
-    $('.sendbutton').removeAttr("disabled");
-})
-
-// multiple choice: save choice
-$('.sendbutton').click(function(){
-    var choice = $("input[name='multiplechoice" + modalPos + "']:checked").val();
-    $.get("backend.php?request=saveMC&id=" + presId + "&choice=" + choice + "&modalid=" + modalPos);
-})
-
-// load script
-$(document).ready(function(){
-    setTimeout(checkNewModalAvaliable, 1000);
-})
+?>
+<center><h1><?php echo $info["title"]; ?></h1></center>
+<canvas height="600px" width="600px" id="wordcloud"></canvas>
+<script>
+    WordCloud(document.getElementById('wordcloud'), {list: <?php echo json_encode(getWordCloudData($presId, $modalId)); ?>, backgroundColor: "transparent", color: "white"} );
+</script>

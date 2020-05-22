@@ -1,4 +1,3 @@
-<?php
 /**
  * @copyright Copyright (c) 2020 Philipp Stappert <mail@philipprogramm.de>
  *
@@ -25,47 +24,34 @@
  * SOFTWARE.
  *
  */
-
-// get functions
-require("functions.php");
-
-// start session
-session_start();
-
-// check headers, if no request is given return 403
-if (!isset($_GET["request"])){
-    // return http 403
-    http_response_code(403);
+:root{
+    /** Full Size **/
+    width: 100%;
+    height: 100%;
 }
 
-$request = $_GET["request"];
+body {
+    /** Background **/
+    background-image: linear-gradient(135deg, #9D37C8, #D6299B);
+}
 
-// request switch
-if ($request == "modalPos"){
-    // only if id is given, else return 403
-    if (!isset($_GET["id"])){
-        http_response_code(403);
-        exit();
-    }
+#content {
+    /** Vertical + Horizontal Center **/
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%); 
+    position: absolute;
+}
 
-    echo getActModal($_GET["id"]);
+#footer-content {
+    /** Horizontal Center + Bottom Placement **/
+    left: 50%;
+    bottom: 5px;
+    -webkit-transform: translate(-50%); 
+    position: absolute;
+}
 
-} else if ($request == "saveMC"){
-    // only if id + choice are given, else return 403
-    if (!isset($_GET["id"]) or !isset($_GET["choice"]) or !isset($_GET["modalid"])){
-        http_response_code(403);
-        exit();
-    }
-
-    file_put_contents("data/" . $_GET["id"] . "/" . $_GET["modalid"] . "/" . session_id() . ".choice", $_GET["choice"]);
-
-} else if ($request == "saveWC"){
-    // only if id + choice are given, else return 403
-    if (!isset($_GET["id"]) or !isset($_GET["word"]) or !isset($_GET["modalid"])){
-        http_response_code(403);
-        exit();
-    }
-
-    $uniqid = uniqid();
-    file_put_contents("data/" . $_GET["id"] . "/" . $_GET["modalid"] . "/" . $uniqid . ".word", $_GET["word"]);
+#canvas {
+    /** transparent canvas **/
+    background: transparent;
 }

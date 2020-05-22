@@ -32,6 +32,11 @@
     // get presentation informations
     $presInfos = getPresentationInformations($_GET["id"]);
 
+    // if page is given, move all participants to that page
+    if (isset($_GET["page"])){
+        setModal($_GET["id"], $_GET["page"]);
+    }
+
 ?>
 <!doctype html>
 <html translate="no" class="notranslate">
@@ -45,23 +50,29 @@
         <!-- CSS -->
         <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="lib/Chart.min.css">
-        <link rel="stylesheet" href="css/viewer.css">
+        <link rel="stylesheet" href="css/presentation.css">
 
     </head>
     <body>
-        <?php
-            // get modals
-            $i = 0;
-            foreach(getModals($_GET["id"]) as $modal){
-                getModalHtml($modal, $i);
-                $i++;
-            }
-        ?>
+        <!-- Scripts -->
+        <!-- Bootstrap / Design -->
+        <script src="lib/jquery-3.5.1.min.js"></script>
+        <script src="lib/popper.min.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="lib/Chart.min.js"></script>
+        <script src="lib/wordcloud2.js"></script>
+
 
         <!-- Content -->
-        <div id="wait-content">
-            <h1 class="text-white"><?php echo $presInfos["name"]; ?> - Willkommen!</h1>
-            <p class="text-white">Sobald der Präsentator Inhalte freischaltet, werden diese hier angezeigt.</p>
+        <div id="content" class="text-white">
+            <?php
+                // if no page is given, display welcome page, else display modal page
+                if (!isset($_GET["page"]) or $_GET["page"] < 0){
+                    echo $presInfos["wait_html"];
+                } else {
+                    echo getModalHtmlViewer($_GET["id"], $_GET["page"]);
+                }
+            ?>
         </div>
 
         <!-- Copyright Notice -->
@@ -70,17 +81,11 @@
         </div>
 
         <!-- Scripts -->
-        <!-- Bootstrap / Design -->
-        <script src="lib/jquery-3.5.1.min.js"></script>
-        <script src="lib/popper.min.js"></script>
-        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-        <script src="lib/Chart.min.js"></script>
-
         <!-- Functionality -->
         <script>
             // Variables
             var presId = "<?php echo $_GET["id"]; ?>";
         </script>
-        <script src="js/viewer.js"></script>
+        <script src="js/presentation.js"></script>
     </body>
 </html>

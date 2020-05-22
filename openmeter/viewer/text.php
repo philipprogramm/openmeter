@@ -26,4 +26,5 @@
  *
  */
 ?>
+<center><h1><?php echo $info["title"]; ?></h1></center>
 <?php echo $info["html"]; ?>

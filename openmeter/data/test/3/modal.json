@@ -1,0 +1,6 @@
+{
+    "type":"wordcloud",
+    "title":"Wörterwolke 2",
+    "forceall":true,
+    "html":"<p>Hier kannst du ein Wort eingeben!</p>"
+}

@@ -25,47 +25,6 @@
  * SOFTWARE.
  *
  */
-
-// get functions
-require("functions.php");
-
-// start session
-session_start();
-
-// check headers, if no request is given return 403
-if (!isset($_GET["request"])){
-    // return http 403
-    http_response_code(403);
-}
-
-$request = $_GET["request"];
-
-// request switch
-if ($request == "modalPos"){
-    // only if id is given, else return 403
-    if (!isset($_GET["id"])){
-        http_response_code(403);
-        exit();
-    }
-
-    echo getActModal($_GET["id"]);
-
-} else if ($request == "saveMC"){
-    // only if id + choice are given, else return 403
-    if (!isset($_GET["id"]) or !isset($_GET["choice"]) or !isset($_GET["modalid"])){
-        http_response_code(403);
-        exit();
-    }
-
-    file_put_contents("data/" . $_GET["id"] . "/" . $_GET["modalid"] . "/" . session_id() . ".choice", $_GET["choice"]);
-
-} else if ($request == "saveWC"){
-    // only if id + choice are given, else return 403
-    if (!isset($_GET["id"]) or !isset($_GET["word"]) or !isset($_GET["modalid"])){
-        http_response_code(403);
-        exit();
-    }
-
-    $uniqid = uniqid();
-    file_put_contents("data/" . $_GET["id"] . "/" . $_GET["modalid"] . "/" . $uniqid . ".word", $_GET["word"]);
-}
+?>
+<center><h1><?php echo $info["title"]; ?></h1></center>
+<?php include($info["url"]); ?>

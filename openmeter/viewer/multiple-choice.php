@@ -25,3 +25,64 @@
  * SOFTWARE.
  *
  */
+
+// generate labels
+$labels = json_encode($info["choices"]);
+
+// get answers
+$mcData = getMultipleChoiceData($presId, $modalId);
+$mcData = json_encode($mcData);
+
+?>
+<h1><?php echo $info["title"]; ?></h1>
+<canvas id="chart" width="400" height="400"></canvas>
+
+<script>
+    var ctx = $('#chart');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: <?php echo $labels; ?>,
+            datasets: [{
+                label: 'Nummer der Votings',
+                data: <?php echo $mcData; ?>,
+                backgroundColor: [
+                    'rgba(255, 0, 0, 0.3)',
+                    'rgba(0, 255, 0, 0.3)',
+                    'rgba(0, 0, 255, 0.3)',
+                    'rgba(192,192,192,0.3)',
+                    'rgba(255,255,0,0.3)',
+                    'rgba(255,0,255,0.3)',
+                    'rgba(255, 0, 0, 0.3)',
+                    'rgba(0, 255, 0, 0.3)',
+                    'rgba(0, 0, 255, 0.3)',
+                    'rgba(192,192,192,0.3)',
+                    'rgba(255,255,0,0.3)',
+                    'rgba(255,0,255,0.3)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            legend:{
+                labels: {
+                    fontColor: 'rgb(255, 255, 255)'
+                }
+            }<?php
+                // on reload, don't animate
+                if(isset($_GET["reload"])){
+            ?>,
+            animation:{
+                duration: 0
+            }
+            <?php
+                }
+            ?>
+        }
+    });
+
+    // auto reload
+    setTimeout(function(){
+        document.location = "presentation.php?id=<?php echo $presId; ?>&page=<?php echo $modalId; ?>&reload=true"
+    }, 5000);
+</script>

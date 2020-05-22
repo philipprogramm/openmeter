@@ -134,3 +134,100 @@ function getModalHtmlViewer(string $presId, int $modalI){
     // include modal
     include('viewer/' . $info["type"] . '.php');
 }
+
+/**
+ * changes participant modal
+ * @author Philipp Stappert <mail@philipprogramm.de>
+ * 
+ * @param string $presId prsentation id
+ * @param int $modalId the id to change to
+ */
+function setModal(string $presId, int $modalId){
+    $input = file_get_contents("data/" . $presId . ".json");
+    $input = json_decode($input, true);
+
+    $input["act_modal_position"] = $modalId;
+
+    $output = json_encode($input);
+    file_put_contents("data/" . $presId . ".json", $output);
+}
+
+/**
+ * get multiple choice data
+ * @author Philipp Stappert <mail@philipprogramm.de>
+ * 
+ * @param string $presId presentation id
+ * @param int $modalId the id of the multiple choice
+ * 
+ * @return array the data with percentage
+ */
+function getMultipleChoiceData(string $presId, int $modalId){
+    // get modal information
+    $info = getModalSettings($presId, $modalId);
+
+    // get all answers
+    $allAnswersData = new DirectoryIterator('data/' . $presId . '/' . $modalId);
+
+    // create answer array
+    $allAnswers = [];
+    foreach ($info["choices"] as $key => $choice){
+        $allAnswers[$key] = 0;
+    }
+    
+    foreach ($allAnswersData as $answer){
+        // exclude dots and modal.json
+        if($answer->isDot()) continue;
+        if($answer == "modal.json") continue;
+
+        // get file content
+        $solution = file_get_contents('data/' . $presId . '/' . $modalId . "/" . $answer);
+        $allAnswers[$solution] = intval($allAnswers[$solution]) + 1;
+    }
+
+    // return array
+    return($allAnswers);
+}
+
+/**
+ * get wordcloud words with text size
+ * @author Philipp Stappert <mail@philipprogramm.de>
+ * 
+ * @param string $presId presentation id
+ * @param int $modalId the id of the modal
+ * 
+ * @return array with the data of the wordcloud
+ */
+function getWordCloudData(string $presId, int $modalId){
+    // get modal information
+    $info = getModalSettings($presId, $modalId);
+
+    // get all answers
+    $allAnswersData = new DirectoryIterator('data/' . $presId . '/' . $modalId);
+
+    // create answer array
+    $allAnswers = [];
+
+    // get answers
+    foreach ($allAnswersData as $answer){
+        // exclude dots and modal.json
+        if($answer->isDot()) continue;
+        if($answer == "modal.json") continue;
+
+        // get file content
+        $answer = file_get_contents('data/' . $presId . '/' . $modalId . "/" . $answer);
+        if (array_key_exists($answer, $allAnswers)){
+            $allAnswers[$answer] = intval($allAnswers[$answer]) + 16;
+        } else {
+            $allAnswers[$answer] = 16;
+        }
+    }
+
+    // format answers to fit wordcloud js request
+    $answerArray = array();
+    foreach($allAnswers as $text => $fontSize){
+        array_push($answerArray, array($text, $fontSize));
+    }
+
+    // return
+    return($answerArray);
+}
